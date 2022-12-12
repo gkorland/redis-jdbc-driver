@@ -80,6 +80,33 @@ jdbc:redis://[[<user>:]<password>@][<host>[:<port>]][/<database>][?<property1>=<
 |```java.sql.ResultSet```         |```jdbc.resultset.RedisResultSetBase```|                                                                               |
 |```java.sql.ResultSetMetaData``` |```jdbc.resultset.RedisResultSetMetaData```| **Partial implementation**: it contains only information about columns.   |
 
+## Getting started example
+
+```java
+		// Load the driver
+		try {
+			Class.forName("jdbc.RedisDriver");
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+			return;
+		}
+		
+		// Create a connection
+		try (Connection connection = DriverManager.getConnection("jdbc:redis://localhost:6379/0", null, null)) {
+			// Execute a query
+			try (Statement statement = connection.createStatement()) {
+				try (ResultSet resultSet = statement.executeQuery("SET key value")) {
+
+					// Process the result set
+					while (resultSet.next()) {
+						String result = resultSet.getString("value");
+						System.out.println("result: " + result);
+					}
+				}
+			}
+		}
+```
+
 ## References
 
 * [DataGrip 2022.3](https://www.jetbrains.com/datagrip/whatsnew/2022-3/): Redis support
